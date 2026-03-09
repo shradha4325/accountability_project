@@ -37,7 +37,7 @@
                     {% if user.skills_to_learn %}
                     <div class="d-flex flex-wrap gap-2">
                         {% for skill in user.skills_to_learn.split %}
-                        <span class="skill-tag">{{ skill|trim|strip:"," }}</span>
+                        <span class="skill-tag">{{ skill|cut:"," }}</span>
                         {% endfor %}
                     </div>
                     {% else %}
