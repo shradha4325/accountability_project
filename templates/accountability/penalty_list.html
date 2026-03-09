@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Penalties - CommitBuddy{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="row mb-5">
+        <div class="col-md-8">
+            <h1 class="fw-bold">My Penalties</h1>
+            <p class="text-muted">Stay disciplined to avoid penalties! Total Outstanding: <span
+                    class="text-danger fw-bold">₹{{ total_penalty }}</span></p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-light">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        {% if penalties %}
+        <div class="table-responsive">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in penalties %}
+                    <tr>
+                        <td>{{ p.missed_date }}</td>
+                        <td class="text-danger fw-bold">₹{{ p.amount }}</td>
+                        <td>{{ p.reason }}</td>
+                        <td>
+                            {% if p.is_paid %}
+                            <span class="badge bg-success">Paid</span>
+                            {% else %}
+                            <span class="badge bg-danger">Unpaid</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <div class="display-1 mb-4">🎉</div>
+            <h3 class="fw-bold">No Penalties!</h3>
+            <p class="text-muted">You've been consistent. Keep up the great work!</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

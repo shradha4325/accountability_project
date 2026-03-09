@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - CommitBuddy{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="row mb-5">
+        <div class="col-md-8">
+            <h1 class="fw-bold">My Dashboard</h1>
+            <p class="text-muted">Keep track of your learning journey and your partner's progress.</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a href="{% url 'log_progress' %}" class="btn btn-premium me-2">Log Daily Progress</a>
+            <a href="{% url 'create_goal' %}" class="btn btn-outline-light">+ New Goal</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- My Progress Section -->
+        <div class="col-lg-6 mb-4">
+            <div class="glass-card mb-4">
+                <h3 class="fw-bold mb-4">My Goals</h3>
+                {% if goals %}
+                {% for goal in goals %}
+                <div class="mb-3 p-3 bg-white bg-opacity-10 rounded">
+                    <h5 class="fw-bold mb-1">{{ goal.skill_name }}</h5>
+                    <small class="text-muted">{{ goal.start_date }} to {{ goal.end_date }} · {{ goal.daily_target
+                        }}h/day</small>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-muted">You haven't set any goals yet. <a href="{% url 'create_goal' %}"
+                        class="text-primary">Create one now!</a></p>
+                {% endif %}
+            </div>
+
+            <div class="glass-card">
+                <h3 class="fw-bold mb-4">Recent Activity</h3>
+                {% if recent_progress %}
+                {% for p in recent_progress %}
+                <div class="mb-3 border-start border-primary border-3 ps-3">
+                    <div class="fw-bold">{{ p.topic }}</div>
+                    <small class="text-muted">{{ p.date }} · {{ p.time_spent }} hours · <span class="text-success">{{
+                            p.status }}</span></small>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-muted">No progress logged yet.</p>
+                {% endif %}
+            </div>
+
+            <div class="glass-card mt-4">
+                <h3 class="fw-bold mb-4">My Status</h3>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span>Missed Days / Penalties</span>
+                    <a href="{% url 'penalty_list' %}" class="btn btn-sm btn-outline-danger">View Penalties</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Partner Section -->
+        <div class="col-lg-6">
+            {% if partner %}
+            <div class="glass-card mb-4 border-primary">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="rounded-circle bg-primary me-3 text-center"
+                        style="width: 50px; height: 50px; line-height: 50px; font-size: 20px;">
+                        {{ partner.username|first|upper }}
+                    </div>
+                    <div>
+                        <h3 class="fw-bold mb-0">
+                            <a href="{% url 'partner_progress' partner.username %}"
+                                class="text-white text-decoration-none">{{ partner.username }}'s Progress</a>
+                        </h3>
+                        <small class="text-muted">Your Accountability Partner</small>
+                    </div>
+                </div>
+
+                {% if partner_progress %}
+                {% for p in partner_progress %}
+                <div class="mb-3 border-start border-secondary border-3 ps-3">
+                    <div class="fw-bold">{{ p.topic }}</div>
+                    <small class="text-muted">{{ p.date }} · {{ p.time_spent }} hours · <span class="text-success">{{
+                            p.status }}</span></small>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-muted">Your partner hasn't logged any progress yet.</p>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="glass-card text-center py-5">
+                <h3 class="fw-bold mb-3">No Partner Connected</h3>
+                <p class="text-muted mb-4">Pair up with someone to stay accountable and motivated!</p>
+                <a href="{% url 'find_partner' %}" class="btn btn-premium">Find a Partner</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Find Partner - CommitBuddy{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="glass-card mb-4">
+        <h2 class="fw-bold mb-4">Find an Accountability Partner</h2>
+        <form method="get" class="row g-3">
+            <div class="col-md-9">
+                <input type="text" name="q" class="form-control" placeholder="Search by username..."
+                    value="{{ query }}">
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-premium w-100">Search</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+        {% for u in users %}
+        <div class="col-md-4 mb-4">
+            <div class="glass-card h-100 text-center">
+                <div class="mb-3">
+                    <div class="rounded-circle bg-primary d-inline-block"
+                        style="width: 60px; height: 60px; line-height: 60px; font-size: 24px;">
+                        {{ u.username|first|upper }}
+                    </div>
+                </div>
+                <h4 class="fw-bold">{{ u.username }}</h4>
+                <p class="text-muted small">{{ u.skills_to_learn|truncatechars:50 }}</p>
+                <a href="{% url 'connect_partner' u.id %}" class="btn btn-premium btn-sm">Connect</a>
+            </div>
+        </div>
+        {% empty %}
+        {% if query %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted">No available partners found for "{{ query }}".</p>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ partner.username }}'s Progress - CommitBuddy{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="row mb-5">
+        <div class="col-md-8">
+            <div class="d-flex align-items-center">
+                <div class="rounded-circle bg-primary me-3 text-center"
+                    style="width: 60px; height: 60px; line-height: 60px; font-size: 24px;">
+                    {{ partner.username|first|upper }}
+                </div>
+                <div>
+                    <h1 class="fw-bold mb-0">{{ partner.username }}'s Journey</h1>
+                    <p class="text-muted">Accountability Partner</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-light">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <h3 class="fw-bold mb-4">Full Progress History</h3>
+        {% if progress_logs %}
+        <div class="table-responsive">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Goal</th>
+                        <th>Topic</th>
+                        <th>Time Spent</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in progress_logs %}
+                    <tr>
+                        <td>{{ log.date }}</td>
+                        <td>{{ log.goal.skill_name }}</td>
+                        <td>{{ log.topic }}</td>
+                        <td>{{ log.time_spent }}h</td>
+                        <td>
+                            <span
+                                class="badge {% if log.status == 'Completed' %}bg-success{% else %}bg-warning text-dark{% endif %}">
+                                {{ log.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No progress entries found for your partner.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
