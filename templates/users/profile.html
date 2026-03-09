@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile - CommitBuddy{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center fade-in">
+    <div class="col-md-8">
+        <div class="glass-card">
+            <div class="d-flex align-items-center mb-4">
+                <div class="avatar-circle me-3">
+                    {{ user.username|first|upper }}
+                </div>
+                <div>
+                    <h2 class="mb-0 fw-bold">{{ user.username }}'s Profile</h2>
+                    <p class="text-muted mb-0">Manage your account settings and goals</p>
+                </div>
+            </div>
+
+            <hr class="border-light opacity-10 mb-4">
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-user-circle me-2 text-primary"></i>Account Details</h5>
+                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>Email:</strong> {{ user.email|default:"Not set" }}</p>
+                    <p><strong>Partner:</strong>
+                        {% if user.partner %}
+                        <span class="badge bg-success">{{ user.partner.username }}</span>
+                        {% else %}
+                        <span class="text-muted italic">No partner connected yet.</span>
+                        <a href="{% url 'find_partner' %}" class="btn btn-sm btn-outline-primary ms-2">Find Partner</a>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-tools me-2 text-primary"></i>Skills Focus</h5>
+                    {% if user.skills_to_learn %}
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for skill in user.skills_to_learn.split %}
+                        <span class="skill-tag">{{ skill|trim|strip:"," }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted italic">No skills listed yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <hr class="border-light opacity-10 my-4">
+
+            <h5 class="fw-bold mb-3"><i class="fas fa-edit me-2 text-primary"></i>Update Profile</h5>
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                    <div class="form-text text-muted">{{ field.help_text }}</div>
+                    {% endif %}
+                    {% for error in field.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-premium mt-3">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .avatar-circle {
+        width: 64px;
+        height: 64px;
+        background: var(--primary-gradient);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+    }
+
+    .skill-tag {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+    }
+
+    input,
+    textarea {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        padding: 0.75rem !important;
+    }
+
+    input:focus,
+    textarea:focus {
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0 0 0.25rem rgba(0, 210, 255, 0.25) !important;
+    }
+</style>
+{% endblock %}
