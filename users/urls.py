@@ -6,4 +6,5 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('find-partner/', views.find_partner, name='find_partner'),
     path('connect/<int:partner_id>/', views.connect_partner, name='connect_partner'),
+    path('disconnect/', views.disconnect_partner, name='disconnect_partner'),
 ]

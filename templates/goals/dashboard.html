@@ -72,7 +72,13 @@
                             <a href="{% url 'partner_progress' partner.username %}"
                                 class="text-white text-decoration-none">{{ partner.username }}'s Progress</a>
                         </h3>
-                        <small class="text-muted">Your Accountability Partner</small>
+                        <div class="d-flex align-items-center">
+                            <small class="text-muted me-3">Your Accountability Partner</small>
+                            <a href="{% url 'disconnect_partner' %}" class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('Are you sure you want to disconnect from this partner?')">
+                                Change Partner
+                            </a>
+                        </div>
                     </div>
                 </div>
 

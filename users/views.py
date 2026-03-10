@@ -46,3 +46,15 @@ def connect_partner(request, partner_id):
         partner.save()
         messages.success(request, f"You are now connected with {partner.username}!")
     return redirect('dashboard')
+
+@login_required
+def disconnect_partner(request):
+    if request.user.partner:
+        partner = request.user.partner
+        # Disconnect both sides
+        request.user.partner = None
+        partner.partner = None
+        request.user.save()
+        partner.save()
+        messages.success(request, f"You have disconnected from {partner.username}.")
+    return redirect('dashboard')
